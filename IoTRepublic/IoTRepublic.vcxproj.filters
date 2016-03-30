@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="XBeeBroker">
+      <UniqueIdentifier>{2f372576-887e-48b7-9c04-aa0d1d740ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{3b908711-2e28-4107-b569-816e65a7f420}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\BroadcastServer.cpp" />
+    <ClCompile Include="..\IoTService.cpp" />
+    <ClCompile Include="..\XBeeBroker\rs232.cpp">
+      <Filter>XBeeBroker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\XBeeBroker\XBeeApiMode.cpp">
+      <Filter>XBeeBroker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\XBeeBroker\XBeeBroker.cpp">
+      <Filter>XBeeBroker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\file.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\IoTUtility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\jsFileParser.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\jsmn.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utility\thread.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BroadcastServer.h" />
+    <ClInclude Include="..\IoTService.h" />
+    <ClInclude Include="..\XBeeBroker\rs232.h">
+      <Filter>XBeeBroker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XBeeBroker\XBeeApiMode.h">
+      <Filter>XBeeBroker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XBeeBroker\XBeeBroker.h">
+      <Filter>XBeeBroker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\file.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\IoTSocket.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\IoTUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\jsFileParser.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\jsmn.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Utility\thread.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
