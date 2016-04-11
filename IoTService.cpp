@@ -7,6 +7,7 @@
 #include "Utility/jsFileParser.h"
 #include "Utility/file.h"
 #include "BroadcastServer.h"
+#include "BLEBeeBroker\BLEBeeBroker.h"
 
 //Just for test
 //#include "XBeeBroker\XBeeApiMode.h"
@@ -68,25 +69,28 @@ void loadConfigFile();
 
 int main(int argc, char *argv[])
 {
+	//ble_test();
+	
 	init_server_info();
 
 	Server_Object serverObj;
 
 	start_broadcast_server();
+
 	init_main_server(&serverObj);
 	start_main_server(&serverObj);
-	start_XBee_client();
-
-	//loadConfigFile();
-
+	
+	//start_XBee_broker();
+	start_ble_broker();
+		
 	PAUSE;
-
+	
 	stop_broadcast_server();
-	stop_XBee_client();
+	//stop_XBee_broker();
+	stop_ble_broker();
 	close_main_server(&serverObj);
-
-	PAUSE
-
+		
+	PAUSE;
 	return 0;
 }
 
@@ -343,6 +347,8 @@ int main_server_loop(Server_Object *server_obj)
 
 int close_main_server(Server_Object *server_obj)
 {
+	printf("Server closed");
+
 	int i;
 
 	for (i = 0; i < MAXCLIENTS; i++)
@@ -357,15 +363,12 @@ int close_main_server(Server_Object *server_obj)
 	Thread_stop(&server_obj->serverThread);
 	Thread_kill(&server_obj->serverThread);
 
-
-
 	clear_all_device_info();
 
 #if defined(WIN32)
 	WSACleanup();
 #endif
 
-	printf("Server closed");
 	return 0;
 }
 

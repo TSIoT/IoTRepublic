@@ -18,7 +18,7 @@
 */
 
 #include "XBeeApiMode.h"
-#include "rs232.h"
+#include "../Utility/rs232.h"
 #include "XBeeBroker.h"
 
 #if defined(WIN32)

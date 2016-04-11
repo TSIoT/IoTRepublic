@@ -20,8 +20,8 @@ typedef struct
 }Register_info;
 
 void XBeeTransferTest();
-int InitXBeeClient();
-void UnInitXBeeClient();
-void start_XBee_client();
-void stop_XBee_client();
+int init_XBee_broker();
+void uninit_XBee_broker();
+void start_XBee_broker();
+void stop_XBee_broker();
 #endif

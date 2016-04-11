@@ -41,10 +41,11 @@ typedef struct
 
 enum recv_result
 {
-	recv_result_NOERROR=0,
+	recv_result_NOERROR = 0,
 	recv_result_COMPLETED = 1,
 	recv_result_INVALID_PACKAGE = -1,
 	recv_result_CHECKSUM_ERROR = -2,
+	recv_result_TIMEOUT = -3
 };
 
 enum command_t
@@ -87,4 +88,5 @@ unsigned long get_millis();
 void printAllChar(char *data, int length);
 void charcat(char *base_buf, char *target, int starIdx, int length);
 void split_char_array(char *source, char *output1, char *output2, int split_index, int length);
+int string_search(char *pattern, int startIndex, char *base_str);
 #endif

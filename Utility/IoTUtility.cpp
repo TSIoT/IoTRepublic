@@ -716,4 +716,34 @@ void split_char_array(char *source, char *output1, char *output2, int split_inde
 
 }
 
+int string_search(char *pattern, int startIndex, char *base_str)
+{
+	int pos_search = 0;
+	int pos_text = 0;
+	int len_search = strlen(pattern);
+	int len_text = strlen(base_str);
+	int targetIndex = -1;
+	for (pos_text = startIndex; pos_text < len_text; pos_text++)
+	{
+		if (base_str[pos_text] == pattern[pos_search])
+		{
+			++pos_search;
+			if (pos_search == len_search)
+			{
+				// match
+				targetIndex = pos_text - (len_search - 1);
+				//printf("match from %d to %d\n", targetIndex, pos_text);
+				//return targetIndex;
+				break;
+			}
+		}
+		else
+		{
+			//pos_text -= pos_search;
+			pos_search = 0;
+		}
+	}
 
+
+	return targetIndex;
+}

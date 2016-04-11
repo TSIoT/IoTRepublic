@@ -147,18 +147,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BLEBeeBroker\BLEBeeBroker.cpp" />
     <ClCompile Include="..\BroadcastServer.cpp" />
     <ClCompile Include="..\IoTService.cpp" />
     <ClCompile Include="..\Utility\file.cpp" />
     <ClCompile Include="..\Utility\IoTUtility.cpp" />
     <ClCompile Include="..\Utility\jsFileParser.cpp" />
     <ClCompile Include="..\Utility\jsmn.cpp" />
+    <ClCompile Include="..\Utility\rs232.cpp" />
     <ClCompile Include="..\Utility\thread.cpp" />
-    <ClCompile Include="..\XBeeBroker\rs232.cpp" />
     <ClCompile Include="..\XBeeBroker\XBeeApiMode.cpp" />
     <ClCompile Include="..\XBeeBroker\XBeeBroker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BLEBeeBroker\BLEBeeBroker.h" />
     <ClInclude Include="..\BroadcastServer.h" />
     <ClInclude Include="..\IoTService.h" />
     <ClInclude Include="..\Utility\file.h" />
@@ -166,8 +168,8 @@
     <ClInclude Include="..\Utility\IoTUtility.h" />
     <ClInclude Include="..\Utility\jsFileParser.h" />
     <ClInclude Include="..\Utility\jsmn.h" />
+    <ClInclude Include="..\Utility\rs232.h" />
     <ClInclude Include="..\Utility\thread.h" />
-    <ClInclude Include="..\XBeeBroker\rs232.h" />
     <ClInclude Include="..\XBeeBroker\XBeeApiMode.h" />
     <ClInclude Include="..\XBeeBroker\XBeeBroker.h" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 #include "XBeeBroker.h"
-#include "rs232.h"
+#include "../Utility/rs232.h"
 #include "../Utility/thread.h"
 #include "../IoTService.h"
 #include <stdlib.h>
@@ -50,7 +50,7 @@ XBeeAddress64* find_xbee_addr_by_iotip(IoTIp *iotip);
 void clear_all_xbee_device();
 
 
-int InitXBeeClient()
+int init_XBee_broker()
 {
 	int i = 0;
 	for (i = 0; i < MAXDEVICECOUNT; i++)
@@ -64,7 +64,7 @@ int InitXBeeClient()
 	//printf("\nInitialising Winsock...");
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
-		printf("XBeeClient Failed. Error Code : %d", WSAGetLastError());
+		printf("XBeeBroker Failed. Error Code : %d", WSAGetLastError());
 		PAUSE;
 		return -1;
 	}
@@ -72,7 +72,7 @@ int InitXBeeClient()
 
 	if ((iot_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
-		printf("XBeeClient Could not create socket\n");
+		printf("XBeeBroker Could not create socket\n");
 		PAUSE;
 		return -1;
 	}
@@ -81,8 +81,10 @@ int InitXBeeClient()
 	return 0;
 }
 
-void UnInitXBeeClient()
+void uninit_XBee_broker()
 {
+	clear_all_xbee_device();
+	CloseIoTSocket(iot_socket);
 	RS232_CloseComport(COMPORTNUMBER);
 }
 
@@ -539,7 +541,7 @@ IoTIp* find_iotip_by_XBeeAddr(XBeeAddress64 *addr)
 {
 	int i = 0;
 	IoTIp* ip = NULL;
-	for (i = 0; i < MAXCLIENTS; i++)
+	for (i = 0; i < MAXDEVICECOUNT; i++)
 	{
 		if (xbee_devices[i] != NULL && xbee_devices[i]->xb_addr.isEqual(*addr))
 		{
@@ -570,7 +572,7 @@ XBeeAddress64* find_xbee_addr_by_iotip(IoTIp *iotip)
 int is_xbee_device_exists(XBeeAddress64 *addr)
 {
 	int isExists = 0, i=0;
-	for (i = 0; i < MAXCLIENTS; i++)
+	for (i = 0; i < MAXDEVICECOUNT; i++)
 	{
 		if (xbee_devices[i] != NULL)
 		{
@@ -618,9 +620,9 @@ void unlock_xbee(int index)
 
 }
 
-void start_XBee_client()
+void start_XBee_broker()
 {
-	InitXBeeClient();
+	init_XBee_broker();
 	Thread_create(&tcp_client_thread, (TSThreadProc)listen_to_end_device_loop, NULL);
 	Thread_run(&tcp_client_thread);
 
@@ -630,7 +632,7 @@ void start_XBee_client()
 	Mutex_create(&lock);
 }
 
-void stop_XBee_client()
+void stop_XBee_broker()
 {
 
 	Thread_stop(&tcp_client_thread);
@@ -639,9 +641,9 @@ void stop_XBee_client()
 	Thread_stop(&xbee_client_thread);
 	Thread_kill(&xbee_client_thread);
 
-	Mutex_free(&lock);
-
-	clear_all_xbee_device();
+	Mutex_free(&lock);	
+	
+	uninit_XBee_broker();
 }
 
 //**************************
