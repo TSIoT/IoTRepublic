@@ -3,7 +3,7 @@
 #include "Utility/IoTSocket.h"
 #include "Utility/IoTUtility.h"
 
-#define MAXRECV 8000 //receive buffer max size
+#define MAXRECV 2000 //receive buffer max size
 #define MAXCLIENTS 30 //max client size
 #define SERVERPORT 6210 //Server portnumber
 

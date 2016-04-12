@@ -74,12 +74,11 @@ int main(int argc, char *argv[])
 	init_server_info();
 
 	Server_Object serverObj;
+	init_main_server(&serverObj);
+	start_main_server(&serverObj);
 
 	start_broadcast_server();
 
-	init_main_server(&serverObj);
-	start_main_server(&serverObj);
-	
 	//start_XBee_broker();
 	start_ble_broker();
 		

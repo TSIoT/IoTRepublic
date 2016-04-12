@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Library">
+      <UniqueIdentifier>{d9a66287-d690-4305-80cf-e5b7fceb5df8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\ble_device_lib.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\IoTUtility.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\jsFileParser.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\jsmn.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\XBee.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\ble_device_lib.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\IoTUtility.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\jsFileParser.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\jsmn.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\XBee.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -580,8 +580,12 @@ int isCompletedPackage(char *buffer, int *buffer_length)
 
 recv_result getCompletedPackage(char *buffer, int *buffer_length, IoT_Package *packageInfo)
 {
+	if (*buffer_length < strlen(CurrentVersion))
+	{
+		return recv_result_NOERROR;
+	}
 	//if the package is not valid, just drop it
-	if (isVaildPackage(buffer, *buffer_length) != 1)
+	else if (isVaildPackage(buffer, *buffer_length) != 1)
 	{
 		memset(buffer, '\0', *buffer_length);
 		*buffer_length = 0;
