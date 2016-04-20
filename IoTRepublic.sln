@@ -7,28 +7,48 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IoTRepublic", "IoTRepublic\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arduino", "Arduino\Arduino.vcxproj", "{F29891E5-DA13-4B3B-BF43-554430691544}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOTProtocol_CSHARP", "IOTProtocol_c#\IOTProtocol_CSHARP.csproj", "{FFACC856-EF9C-4C70-9919-05C15FC91674}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Debug|x64.ActiveCfg = Debug|x64
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Debug|x64.Build.0 = Debug|x64
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Debug|x86.ActiveCfg = Release|Win32
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Debug|x86.Build.0 = Release|Win32
+		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Release|Any CPU.ActiveCfg = Release|Win32
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Release|x64.ActiveCfg = Release|x64
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Release|x64.Build.0 = Release|x64
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Release|x86.ActiveCfg = Release|Win32
 		{5001D5B7-5CC3-497E-9BB4-14DE0CB23198}.Release|x86.Build.0 = Release|Win32
+		{F29891E5-DA13-4B3B-BF43-554430691544}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{F29891E5-DA13-4B3B-BF43-554430691544}.Debug|x64.ActiveCfg = Debug|x64
 		{F29891E5-DA13-4B3B-BF43-554430691544}.Debug|x64.Build.0 = Debug|x64
 		{F29891E5-DA13-4B3B-BF43-554430691544}.Debug|x86.ActiveCfg = Release|Win32
+		{F29891E5-DA13-4B3B-BF43-554430691544}.Release|Any CPU.ActiveCfg = Release|Win32
 		{F29891E5-DA13-4B3B-BF43-554430691544}.Release|x64.ActiveCfg = Release|x64
 		{F29891E5-DA13-4B3B-BF43-554430691544}.Release|x64.Build.0 = Release|x64
 		{F29891E5-DA13-4B3B-BF43-554430691544}.Release|x86.ActiveCfg = Release|Win32
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Debug|x64.Build.0 = Debug|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Debug|x86.Build.0 = Debug|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Release|x64.ActiveCfg = Release|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Release|x64.Build.0 = Release|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFACC856-EF9C-4C70-9919-05C15FC91674}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

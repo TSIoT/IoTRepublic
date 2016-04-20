@@ -350,19 +350,22 @@ int close_main_server(Server_Object *server_obj)
 
 	int i;
 
+	CloseIoTSocket(server_obj->listener);
+	Thread_stop(&server_obj->serverThread);
+	Thread_kill(&server_obj->serverThread);
+	ms_sleep(10);
+	
 	for (i = 0; i < MAXCLIENTS; i++)
 	{
 		if (packageBuffer[i] != NULL)
 		{
 			free_package_buffer(packageBuffer[i]);
 		}
-	}
-
-	CloseIoTSocket(server_obj->listener);
-	Thread_stop(&server_obj->serverThread);
-	Thread_kill(&server_obj->serverThread);
+	}	
+	
 
 	clear_all_device_info();
+	
 
 #if defined(WIN32)
 	WSACleanup();

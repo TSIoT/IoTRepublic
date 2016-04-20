@@ -815,7 +815,7 @@ uint8_t XBee::getNextFrameId() {
 int XBee::begin(int comNum) 
 {
 	//int i, n, s, bdrate = 115200;
-	int i, n, s, bdrate = 57600;
+	int bdrate = 57600;
 	//int i, n, s, bdrate = 9600;
 	//comPortNumber = comNum;
 	char mode[] = { '8', 'N', '1', 0 };
