@@ -61,10 +61,11 @@ void init_token(JsonData *jsonData)
 	jsonData->token_size = jsmn_parse(&p, jsonData->content, jsonData->content_size, jsonData->tokens, MAXTOKENSIZE);
 	if (jsonData->token_size<0)
 	{
-		jsonData->content_size=
-		puts("Init Error");
+		
+		puts("Json Init Error");
 		//Do something here, or we will exit without warning
-		exit(EXIT_SUCCESS);
+		
+		//exit(EXIT_SUCCESS);
 	}
 	return;
 }

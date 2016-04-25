@@ -685,7 +685,11 @@ void printAllChar(char *data, int length)
 		if (data[i] == '\0')
 			printf(",");
 		else
+		{
 			printf("%c", data[i]);
+			//printf("%X ", data[i]);
+		}
+			
 	}
 	printf("\n");
 }

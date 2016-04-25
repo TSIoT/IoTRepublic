@@ -843,7 +843,7 @@ int is_ble_device_exists(char *addr)
 		if (ble_devices[i] != NULL)
 		{
 			//if (xbee_devices[i]->xb_addr.isEqual(*addr))
-			if (memcmp(ble_devices[i]->ble_mac_addr, addr, MACADDRLEN))
+			if (memcmp(ble_devices[i]->ble_mac_addr, addr, MACADDRLEN)==0)
 			{
 				isExists = 1;
 				break;

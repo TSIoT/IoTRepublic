@@ -48,6 +48,13 @@ enum recv_result
 	recv_result_TIMEOUT = -3
 };
 
+enum conn_status
+{
+	conn_status_succeed = 0,
+	conn_status_timeout = -1,
+	conn_status_failed = -2
+};
+
 enum command_t
 {
 	command_t_None = 0,

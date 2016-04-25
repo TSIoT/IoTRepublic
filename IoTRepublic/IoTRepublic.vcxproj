@@ -156,8 +156,9 @@
     <ClCompile Include="..\Utility\jsmn.cpp" />
     <ClCompile Include="..\Utility\rs232.cpp" />
     <ClCompile Include="..\Utility\thread.cpp" />
-    <ClCompile Include="..\XBeeBroker\XBeeApiMode.cpp" />
-    <ClCompile Include="..\XBeeBroker\XBeeBroker.cpp" />
+    <ClCompile Include="..\XBeeBroker_API\XBeeApiMode.cpp" />
+    <ClCompile Include="..\XBeeBroker_API\XBeeBroker.cpp" />
+    <ClCompile Include="..\XBeeBroker_AT\XBeeBroker_AT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BLEBeeBroker\BLEBeeBroker.h" />
@@ -170,8 +171,9 @@
     <ClInclude Include="..\Utility\jsmn.h" />
     <ClInclude Include="..\Utility\rs232.h" />
     <ClInclude Include="..\Utility\thread.h" />
-    <ClInclude Include="..\XBeeBroker\XBeeApiMode.h" />
-    <ClInclude Include="..\XBeeBroker\XBeeBroker.h" />
+    <ClInclude Include="..\XBeeBroker_API\XBeeApiMode.h" />
+    <ClInclude Include="..\XBeeBroker_API\XBeeBroker.h" />
+    <ClInclude Include="..\XBeeBroker_AT\XBeeBroker_AT.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

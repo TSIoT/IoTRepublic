@@ -1,25 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="XBeeBroker">
-      <UniqueIdentifier>{2f372576-887e-48b7-9c04-aa0d1d740ea2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{3b908711-2e28-4107-b569-816e65a7f420}</UniqueIdentifier>
     </Filter>
     <Filter Include="BLEBeeBroker">
       <UniqueIdentifier>{60724b6d-bb6b-43e6-b8b0-7fb07ce1cfd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XBeeBroker_AT">
+      <UniqueIdentifier>{bc95b10e-7ffd-4c34-a485-89c8a20bb6a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XBeeBroker_API">
+      <UniqueIdentifier>{2f372576-887e-48b7-9c04-aa0d1d740ea2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BroadcastServer.cpp" />
     <ClCompile Include="..\IoTService.cpp" />
-    <ClCompile Include="..\XBeeBroker\XBeeApiMode.cpp">
-      <Filter>XBeeBroker</Filter>
-    </ClCompile>
-    <ClCompile Include="..\XBeeBroker\XBeeBroker.cpp">
-      <Filter>XBeeBroker</Filter>
-    </ClCompile>
     <ClCompile Include="..\Utility\file.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -41,16 +38,19 @@
     <ClCompile Include="..\BLEBeeBroker\BLEBeeBroker.cpp">
       <Filter>BLEBeeBroker</Filter>
     </ClCompile>
+    <ClCompile Include="..\XBeeBroker_API\XBeeApiMode.cpp">
+      <Filter>XBeeBroker_API</Filter>
+    </ClCompile>
+    <ClCompile Include="..\XBeeBroker_API\XBeeBroker.cpp">
+      <Filter>XBeeBroker_API</Filter>
+    </ClCompile>
+    <ClCompile Include="..\XBeeBroker_AT\XBeeBroker_AT.cpp">
+      <Filter>XBeeBroker_AT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BroadcastServer.h" />
     <ClInclude Include="..\IoTService.h" />
-    <ClInclude Include="..\XBeeBroker\XBeeApiMode.h">
-      <Filter>XBeeBroker</Filter>
-    </ClInclude>
-    <ClInclude Include="..\XBeeBroker\XBeeBroker.h">
-      <Filter>XBeeBroker</Filter>
-    </ClInclude>
     <ClInclude Include="..\Utility\file.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -74,6 +74,15 @@
     </ClInclude>
     <ClInclude Include="..\BLEBeeBroker\BLEBeeBroker.h">
       <Filter>BLEBeeBroker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XBeeBroker_API\XBeeApiMode.h">
+      <Filter>XBeeBroker_API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XBeeBroker_API\XBeeBroker.h">
+      <Filter>XBeeBroker_API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XBeeBroker_AT\XBeeBroker_AT.h">
+      <Filter>XBeeBroker_AT</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

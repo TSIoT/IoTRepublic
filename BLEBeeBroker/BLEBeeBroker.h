@@ -15,15 +15,9 @@ typedef struct
 	int isAlive;
 }BLE_dev_info;
 
-enum conn_status
-{
-	conn_status_succeed=0,
-	conn_status_timeout=-1,
-	conn_status_failed=-2
-};
 
 
-void ble_test();
+void xbee_test();
 void start_ble_broker();
 void stop_ble_broker();
 

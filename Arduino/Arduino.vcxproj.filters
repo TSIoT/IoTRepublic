@@ -6,36 +6,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\ble_device_lib.cpp">
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTRepublic\IoTRepublic.cpp">
       <Filter>Library</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\IoTUtility.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\jsFileParser.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\jsmn.cpp">
-      <Filter>Library</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\XBee.cpp">
+    <ClCompile Include="..\..\..\..\Arduino\libraries\SensorLibrary\SensorLib.cpp">
       <Filter>Library</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\ble_device_lib.h">
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTRepublic\IoTRepublic.h">
       <Filter>Library</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\IoTUtility.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\jsFileParser.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\jsmn.h">
-      <Filter>Library</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\XBee.h">
+    <ClInclude Include="..\..\..\..\Arduino\libraries\SensorLibrary\SensorLib.h">
       <Filter>Library</Filter>
     </ClInclude>
   </ItemGroup>

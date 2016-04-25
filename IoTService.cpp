@@ -3,11 +3,13 @@
 #include<string.h>
 
 #include "IoTService.h"
-#include "XBeeBroker/XBeeBroker.h"
+#include "XBeeBroker_API/XBeeBroker.h"
+#include "XBeeBroker_AT/XBeeBroker_AT.h"
 #include "Utility/jsFileParser.h"
 #include "Utility/file.h"
 #include "BroadcastServer.h"
-#include "BLEBeeBroker\BLEBeeBroker.h"
+#include "BLEBeeBroker/BLEBeeBroker.h"
+
 
 //Just for test
 //#include "XBeeBroker\XBeeApiMode.h"
@@ -78,9 +80,10 @@ int main(int argc, char *argv[])
 	start_main_server(&serverObj);
 
 	start_broadcast_server();
-
+	start_xbee_at_broker();
+	//xbee_test();
 	//start_XBee_broker();
-	start_ble_broker();
+	//start_ble_broker();
 		
 	PAUSE;
 	
@@ -582,16 +585,18 @@ Package_Buffer* generate_package_buffer()
 	Package_Buffer *bufferInfo;
 	bufferInfo = (Package_Buffer*)malloc(sizeof(Package_Buffer));
 	bufferInfo->receiveCount = 0;
-	bufferInfo->tempBuffer = (char*)malloc(sizeof(char)*MAXRECV);
+	//bufferInfo->tempBuffer = (char*)malloc(sizeof(char)*MAXRECV);
+	//memset(bufferInfo->tempBuffer,'\0',MANAGER_MAX_RECV_BUF);
 	memset(bufferInfo->tempBuffer, '\0', MAXRECV);
 	return bufferInfo;
 }
 
 void free_package_buffer(Package_Buffer *package_buffer)
 {
+	/*
 	if (package_buffer->tempBuffer != NULL)
 		free(package_buffer->tempBuffer);
-
+	*/
 	free(package_buffer);
 }
 

@@ -7,6 +7,8 @@
 #define MAXCLIENTS 30 //max client size
 #define SERVERPORT 6210 //Server portnumber
 
+#define MANAGER_MAX_RECV_BUF 2000
+
 extern char *ServerIP;
 
 typedef struct
@@ -29,8 +31,8 @@ typedef struct
 
 typedef struct
 {
-	char *tempBuffer;
-	//char tempBuffer[MAXRECV];
+	//char *tempBuffer;
+	char tempBuffer[MAXRECV];	
 	int receiveCount;
 } Package_Buffer;
 

@@ -18,6 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTRepublic\IoTRepublic.cpp" />
+    <ClCompile Include="..\..\..\..\Arduino\libraries\SensorLibrary\SensorLib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTRepublic\IoTRepublic.h" />
+    <ClInclude Include="..\..\..\..\Arduino\libraries\SensorLibrary\SensorLib.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F29891E5-DA13-4B3B-BF43-554430691544}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -138,20 +146,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\ble_device_lib.cpp" />
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\IoTUtility.cpp" />
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\jsFileParser.cpp" />
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\jsmn.cpp" />
-    <ClCompile Include="..\..\..\..\Arduino\libraries\IoTUtility\XBee.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\ble_device_lib.h" />
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\IoTUtility.h" />
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\jsFileParser.h" />
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\jsmn.h" />
-    <ClInclude Include="..\..\..\..\Arduino\libraries\IoTUtility\XBee.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
