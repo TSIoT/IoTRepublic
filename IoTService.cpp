@@ -89,7 +89,8 @@ int main(int argc, char *argv[])
 	
 	stop_broadcast_server();
 	//stop_XBee_broker();
-	stop_ble_broker();
+	//stop_ble_broker();
+	stop_xbee_at_broker();
 	close_main_server(&serverObj);
 		
 	PAUSE;
@@ -349,23 +350,24 @@ int main_server_loop(Server_Object *server_obj)
 
 int close_main_server(Server_Object *server_obj)
 {
-	printf("Server closed");
+	printf("Server closed_1");
 
 	int i;
 
 	CloseIoTSocket(server_obj->listener);
-	Thread_stop(&server_obj->serverThread);
-	Thread_kill(&server_obj->serverThread);
-	ms_sleep(10);
-	
+	//printf("Server closed_2");
+	//Thread_stop(&server_obj->serverThread);	
+	printf("Server closed_2.5");
+	Thread_kill(&server_obj->serverThread);	
+	printf("Server closed_3");
 	for (i = 0; i < MAXCLIENTS; i++)
 	{
 		if (packageBuffer[i] != NULL)
 		{
-			free_package_buffer(packageBuffer[i]);
+			//free_package_buffer(packageBuffer[i]);
 		}
 	}	
-	
+	printf("Server closed_4");
 
 	clear_all_device_info();
 	
@@ -373,7 +375,7 @@ int close_main_server(Server_Object *server_obj)
 #if defined(WIN32)
 	WSACleanup();
 #endif
-
+	printf("Server closed_5");
 	return 0;
 }
 
