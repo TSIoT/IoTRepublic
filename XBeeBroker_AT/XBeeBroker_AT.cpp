@@ -56,7 +56,7 @@ recv_result check_sum(char *buf, int len, unsigned int sended_sum);
 //int send_package_to_XBee_at(IoT_Package package);
 int send_package_to_Manager_XBee_at(IoTSocket socket, IoT_Package *package);
 //recv_result recv_package_from_XBee_at(IoT_Package *package);
-recv_result recv_package_from_Manager_XBee_at(IoTSocket socket, IoT_Package *package);
+//recv_result recv_package_from_Manager_XBee_at(IoTSocket socket, IoT_Package *package);
 
 
 recv_result recv_char_from_XBee_at(char *base_buf, int max_len, unsigned long timeout);
@@ -90,10 +90,10 @@ void xbee_test()
 
 //listen tcp server send to ble device
 int xbee_at_listen_to_manager_loop(void)
-{	
+{
 	const int recv_buf_size = 10;
 	const int max_cmd_buf_size = 50;
-	char *addr_dh,*addr_dl;
+	//char *addr_dh,*addr_dl;
 
 	recv_result result, result_from_end_device;
 	struct sockaddr_in address;
@@ -104,11 +104,14 @@ int xbee_at_listen_to_manager_loop(void)
 	IoT_Command send_cmd;
 	conn_status status;
 	int target_index = -1,len=0,cmd_len=0;
+	int offset = 0,n=0;
 
 	char cmd_id[COMMAND_CHAR_SIZE] = {'\0'};
 	char recv_buf[recv_buf_size] = { '\0' };
 	char cmd_buf[max_cmd_buf_size] = { '\0' };
-	
+	char temp_buf[MAXRECV] = {'\0'};
+	char temp_recv[MAXRECV] = { '\0' };
+
 
 	address.sin_addr.s_addr = inet_addr("127.0.0.1");
 	address.sin_family = AF_INET;
@@ -122,80 +125,99 @@ int xbee_at_listen_to_manager_loop(void)
 
 	while (1)
 	{
-		result = recv_package_from_Manager_XBee_at(xbee_at_broker_socket, &recv_package);
-		if (result == recv_result_COMPLETED)
-		{						
-			target_index = -1;
-			target_index = find_XBee_at_device_index_by_IoTIp(&recv_package.des_ip);
-			
-			if (target_index >=0)//found target device
-			{
-				enter_command_mode();
-				status = conn_XBee_at_device(xbee_at_devices[target_index]->xbee_at_mac_addr_DH, xbee_at_devices[target_index]->xbee_at_mac_addr_DL);
-				exit_command_mode();
-
-				if (status == conn_status_succeed)// device conected
+		//result = recv_package_from_Manager_XBee_at(xbee_at_broker_socket, &recv_package);
+		n = recv(xbee_at_broker_socket, temp_recv, MAXRECV, 0);
+		if (n > 0)
+		{
+			charcat(temp_buf, temp_recv, offset, n);
+			offset += n;
+			do
+			{				
+				//printAllChar(tempBuffer, offset);
+				result = getCompletedPackage(temp_buf, &offset, &recv_package);
+				if (result == recv_result_COMPLETED)
 				{
-					//parse the IoT command, only send id to end device
-					recv_cmd = generate_iot_command();
-					decode_iot_cmd(recv_package.data, &recv_cmd);
-					memset(cmd_id,'\0', COMMAND_CHAR_SIZE);
-					strcpy(cmd_id, recv_cmd.ID);
+					target_index = -1;
+					target_index = find_XBee_at_device_index_by_IoTIp(&recv_package.des_ip);
 
-					send_command_to_end_device(cmd_id, strlen(recv_cmd.ID)); 
-					
-					//result_from_end_device = recv_char_from_XBee_at(recv_buf, 4,300 );
-					result_from_end_device=recv_command_from_end_device(recv_buf, &len);
-					if (result_from_end_device == recv_result_COMPLETED && len>0)
+					if (target_index >= 0)//found target device
 					{
-						puts("Got response:");
-						printAllChar(recv_buf, len);
+						enter_command_mode();
+						status = conn_XBee_at_device(xbee_at_devices[target_index]->xbee_at_mac_addr_DH, xbee_at_devices[target_index]->xbee_at_mac_addr_DL);
+						exit_command_mode();
 
-						//Generate a Iot package with IoT_Command
-						send_package = generate_iot_package();
-						send_cmd= generate_iot_command();
-						send_cmd.cmd_type = command_t_ReadResponse;
-						memcpy(send_cmd.ID,recv_cmd.ID, COMMAND_CHAR_SIZE);
-						memset(send_cmd.Value, '\0', COMMAND_CHAR_SIZE);
-						memcpy(send_cmd.Value, recv_buf, len);
-										
-						memset(cmd_buf, '\0',max_cmd_buf_size);
-						cmd_len = encode_iot_cmd(cmd_buf, &send_cmd);
-						
-						create_package(&send_package, recv_package.des_ip.ip, recv_package.sor_ip.ip, cmd_buf, cmd_len);
-						send_package_to_Manager_XBee_at(xbee_at_broker_socket, &send_package);
-												
-						free_package(&send_package);
-						//memset(send_package.data,)
-						//send_package_to_Manager_XBee_at(xbee_at_broker_socket,&package);
+						if (status == conn_status_succeed)// device conected
+						{
+							//parse the IoT command, only send id to end device
+							recv_cmd = generate_iot_command();
+							decode_iot_cmd(recv_package.data, &recv_cmd);
+							memset(cmd_id, '\0', COMMAND_CHAR_SIZE);
+							strcpy(cmd_id, recv_cmd.ID);
+
+							send_command_to_end_device(cmd_id, strlen(recv_cmd.ID));
+
+							//result_from_end_device = recv_char_from_XBee_at(recv_buf, 4,300 );
+							result_from_end_device = recv_command_from_end_device(recv_buf, &len);
+							if (result_from_end_device == recv_result_COMPLETED && len>0)
+							{
+								puts("Got response:");
+								printAllChar(recv_buf, len);
+
+								//Generate a Iot package with IoT_Command
+								send_package = generate_iot_package();
+								send_cmd = generate_iot_command();
+								send_cmd.cmd_type = command_t_ReadResponse;
+								memcpy(send_cmd.ID, recv_cmd.ID, COMMAND_CHAR_SIZE);
+								memset(send_cmd.Value, '\0', COMMAND_CHAR_SIZE);
+								memcpy(send_cmd.Value, recv_buf, len);
+
+								memset(cmd_buf, '\0', max_cmd_buf_size);
+								cmd_len = encode_iot_cmd(cmd_buf, &send_cmd);
+
+								create_package(&send_package, recv_package.des_ip.ip, recv_package.sor_ip.ip, cmd_buf, cmd_len);
+								send_package_to_Manager_XBee_at(xbee_at_broker_socket, &send_package);
+
+								free_package(&send_package);
+								//memset(send_package.data,)
+								//send_package_to_Manager_XBee_at(xbee_at_broker_socket,&package);
+							}
+							else if (result_from_end_device == recv_result_TIMEOUT)
+							{
+								puts("Recv timeout!");
+							}
+
+						}
+						else
+						{
+							printf("Cannnot connecting to XBee_AT Device:%d\n", status);
+						}
+						enter_command_mode();
+						disconn_xbee_at_device();
+						exit_command_mode();
 					}
-					else if (result_from_end_device==recv_result_TIMEOUT)
+					else
 					{
-						puts("Recv timeout!");
+						puts("Cannot found XBee_AT device\n");
 					}
-					
+					//free_package(&recv_package);
 				}
-				else
-				{
-					printf("Cannnot connecting to BLE Device:%d\n", status);
-				}
-				enter_command_mode();
-				disconn_xbee_at_device();
-				exit_command_mode();
-			}
-			else
-			{
-				puts("Cannot found XBee_AT device\n");
-			}
-			free_package(&recv_package);
+
+			} while (result == recv_result_COMPLETED);
 		}
 
+
+		/*
+		if (result == recv_result_COMPLETED)
+		{
+			
+		}
+		*/
 	}
-	
+
 	return 0;
 }
 
-//public main function 
+//public main function
 
 void start_xbee_at_broker()
 {
@@ -271,7 +293,7 @@ void unInit_XBee_at_broker()
 	//uninit device list
 	clear_all_XBee_at_device();
 
-	//uninit comport	
+	//uninit comport
 	RS232_CloseComport(COMPORTNUMBER);
 	printf("COM%d is closed\n", COMPORTNUMBER);
 
@@ -291,13 +313,13 @@ conn_status enter_command_mode()
 	char *enter_cmd = "+++";
 	char *succeed = "OK\r";
 	char buf[buf_len] = { '\0' };
-	puts("Entering AT Command mode");
+	//puts("Entering AT Command mode");
 	ms_sleep(wait_time); //safe time
 	RS232_SendBuf(COMPORTNUMBER, (unsigned char*)enter_cmd, strlen(enter_cmd));
 	temp_res = recv_char_from_XBee_at(buf, strlen(succeed), wait_time);
 	if (temp_res == recv_result_NOERROR)
-	{		
-		printAllChar(buf, strlen(succeed));
+	{
+		//printAllChar(buf, strlen(succeed));
 		res = conn_status_succeed;
 	}
 	else
@@ -324,8 +346,8 @@ conn_status exit_command_mode()
 	temp_res = recv_char_from_XBee_at(buf, strlen(succeed), wait_time);
 	if (temp_res == recv_result_NOERROR)
 	{
-		puts("Exiting AT Command mode");
-		printAllChar(buf, strlen(succeed));
+		//puts("Exiting AT Command mode");
+		//printAllChar(buf, strlen(succeed));
 		res = conn_status_succeed;
 	}
 	else
@@ -343,7 +365,7 @@ conn_status send_AT_command(char *cmd)
 	conn_status res = conn_status_failed;
 	recv_result recv_res = recv_result_INVALID_PACKAGE;
 	char buf[6] = { '\0' };
-	char *succeed = "OK\r";	
+	char *succeed = "OK\r";
 	cmd_len = strlen(cmd);
 	RS232_SendBuf(COMPORTNUMBER, (unsigned char*)cmd, cmd_len);
 
@@ -351,7 +373,7 @@ conn_status send_AT_command(char *cmd)
 
 	if (recv_res == recv_result_NOERROR && memcmp(buf, succeed, strlen(succeed)) == 0)
 	{
-		res = conn_status_succeed;		
+		res = conn_status_succeed;
 	}
 	else if (recv_res == recv_result_TIMEOUT)
 	{
@@ -371,7 +393,7 @@ conn_status send_command_to_end_device(char *cmd, int len)
 {
 	conn_status res = conn_status_failed;
 	int send_buf_len = len + 2; //add start code and end code
-	char *send_buf = (char*)malloc(sizeof(char)*send_buf_len);	
+	char *send_buf = (char*)malloc(sizeof(char)*send_buf_len);
 
 	memset(send_buf, '\0', send_buf_len);
 	charcat(send_buf, cmd, 1, len);
@@ -382,7 +404,7 @@ conn_status send_command_to_end_device(char *cmd, int len)
 
 	free(send_buf);
 
-	return res;	
+	return res;
 }
 
 recv_result recv_command_from_end_device(char *buf, int *len)
@@ -390,9 +412,9 @@ recv_result recv_command_from_end_device(char *buf, int *len)
 	recv_result res = recv_result_INVALID_PACKAGE;
 	char recv_buf[MAXRECVBUFFER] = { '\0' };
 	char temp_buf[MAXRECVBUFFER] = { '\0' };
-	int recv_len = 0,offset=0,end_index=0,i=0,j=0;
+	int recv_len = 0,offset=0,i=0,j=0;
 	int start_recv = 0;
-	int end_recv = 0;	
+	int end_recv = 0;
 	unsigned long wait_time = 0;
 	unsigned long start_time = get_millis();
 
@@ -433,42 +455,20 @@ recv_result recv_command_from_end_device(char *buf, int *len)
 		//found end_code break the loop
 		if (end_recv > 0)
 		{
-			//remove start&end code 
+			//remove start&end code
 			for (i = 1,j=0; i < end_recv; i++,j++)
 			{
 				buf[j] = temp_buf[i];
-			}			
-			*len = end_recv-1; 
+			}
+			*len = end_recv-1;
 			res = recv_result_COMPLETED;
 			break;
 		}
 	}
-	
+
 	clear_XBee_at_recv_buff(300);
 	return res;
 }
-
-recv_result check_sum(char *buf,int len,unsigned int sended_sum)
-{
-	int i = 0;
-	unsigned int sum = 0;
-
-	for (i = 0; i < len; i++)
-	{
-		sum += buf[i];
-	}
-	
-	if (sended_sum == sum)
-	{
-		return recv_result_NOERROR;
-	}
-	else
-	{
-		return recv_result_CHECKSUM_ERROR;
-	}
-
-}
-
 
 //XBee network maintain
 /*
@@ -577,11 +577,15 @@ recv_result recv_package_from_XBee_at(IoT_Package *package)
 	//return recv_result_NOERROR;
 }
 */
+
+/*
 recv_result recv_package_from_Manager_XBee_at(IoTSocket socket, IoT_Package *package)
 {
-	int n = 0, offset = 0;
+	int n = 0;
+	int offset = 0;
 	char recvBuffer[MAXRECV] = { '\0' };
 	char tempBuffer[MAXRECV] = { '\0' };
+
 	recv_result result;
 
 	while (1)
@@ -596,16 +600,12 @@ recv_result recv_package_from_Manager_XBee_at(IoTSocket socket, IoT_Package *pac
 			if (result == recv_result_COMPLETED)
 			{
 				break;
-			}
-			else
-			{
-				return result;
-			}
+			}			
 		}
 	}
-	return recv_result_COMPLETED;
+	return result;
 }
-
+*/
 recv_result recv_char_from_XBee_at(char *base_buf, int max_len, unsigned long timeout)//Use for AT Command
 {
 	const int temp_buf_len = 500;
@@ -663,14 +663,14 @@ void scan_XBee_at_devices()
 	char *syn_msg = "SYN";
 	char *ack_msg = "ACK";
 
-	int mac_pattern_len = strlen(mac_pattern);
-	int end_pattern_len = strlen(end_pattern);
+	//int mac_pattern_len = strlen(mac_pattern);
+	//int end_pattern_len = strlen(end_pattern);
 
 	recv_result result;
 	conn_status connection_status;
 
 	enter_command_mode();
-	//Send beacon 	
+	//Send beacon
 	RS232_SendBuf(COMPORTNUMBER, (unsigned char*)cmd_discover, strlen(cmd_discover));
 	//Read beacon response
 	while (1)
@@ -696,7 +696,7 @@ void scan_XBee_at_devices()
 	}
 	exit_command_mode();
 	//printAllChar(buffer, offset);
-	
+
 	//Start search BLE IoT Device
 	search_res = 0;
 	for (i = 0; i < total_recv_len; i++)
@@ -728,7 +728,7 @@ void scan_XBee_at_devices()
 				char test_buf[10] = {'\0'};
 				test_buf[0] = 0x02;
 				test_buf[1] = 'A';
-				test_buf[2] = 'B';								
+				test_buf[2] = 'B';
 				test_buf[3] = 'C';
 				test_buf[4] = 0x03;
 				test_buf[5] = 0x02;
@@ -736,7 +736,7 @@ void scan_XBee_at_devices()
 				RS232_SendBuf(COMPORTNUMBER, (unsigned char*)test_buf, 7);
 
 				ms_sleep(5000);
-				test_buf[0] = 'E';			
+				test_buf[0] = 'E';
 				test_buf[1] = 'F';
 				test_buf[2] = 'G';
 				test_buf[3] = 0X03;
@@ -744,7 +744,7 @@ void scan_XBee_at_devices()
 				//RS232_SendBuf(COMPORTNUMBER, (unsigned char*)"", strlen(syn_msg));
 				//********************************
 				*/
-				
+
 				result = recv_char_from_XBee_at(receiveBuf, strlen(ack_msg), ack_timeout);
 				if (result == recv_result_NOERROR)
 				{
@@ -771,20 +771,24 @@ void scan_XBee_at_devices()
 				//add_new_XBee_at_device(xbee_at_mac_addr);
 				printf("\n");
 			}
-			
+
 
 			i = search_res;
 		}
 	}
-	
-	
+
+
 }
 
 void ask_a_IoTIP_for_XBee_at(IoT_Package *package)
 {
 	IoTSocket s;
+	recv_result result;
+	int n = 0,offset=0;
+	char temp_buf[MAXRECV] = { '\0' };
+	char temp_recv[MAXRECV] = { '\0' };
 
-	//Add a new device into device list	
+	//Add a new device into device list
 	if ((s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
 		printf("Could not create socket(XBee register)\n");
@@ -808,7 +812,25 @@ void ask_a_IoTIP_for_XBee_at(IoT_Package *package)
 	create_package(package, "0", "0", "0", 1);
 	send_package_to_Manager_XBee_at(s, package);
 
-	recv_package_from_Manager_XBee_at(s, package);
+	while(1)
+	{
+		n = recv(s, temp_recv, MAXRECV, 0);
+		if (n > 0)
+		{
+			charcat(temp_buf, temp_recv, offset, n);
+			offset += n;
+			//printAllChar(tempBuffer, offset);
+			result = getCompletedPackage(temp_buf, &offset, package);
+			if (result == recv_result_COMPLETED)
+			{
+				break;
+			}
+		}
+	}
+	
+	
+
+	//recv_package_from_Manager_XBee_at(s, package);
 
 	CloseIoTSocket(s);
 }
@@ -819,9 +841,9 @@ int XBee_at_dev_register(char *addr_dh,char *addr_dl)
 	IoT_Package requestIp = generate_iot_package();
 	IoT_Package package = generate_iot_package();
 	recv_result result;
-	int n = 0, length = 0;
+	int  length = 0;
 	unsigned int sum = 0;
-	unsigned long start_taime = 0, wait_time = 0;
+	//unsigned long start_taime = 0, wait_time = 0;
 	char dev_pack_buf[MAXRECVBUFFER] = {'\0'};
 
 	char *cmde_des = "DES";
@@ -831,10 +853,11 @@ int XBee_at_dev_register(char *addr_dh,char *addr_dl)
 		add_new_XBee_at_device(addr_dh, addr_dl);
 	}
 
-	//Ask a IoTIP then give to BLE device
+	//Ask a IoTIP then give to XBee_AT device
 	ask_a_IoTIP_for_XBee_at(&requestIp);
-	update_XBee_at_iot_ip(addr_dh,addr_dl, requestIp.des_ip);	
-
+	update_XBee_at_iot_ip(addr_dh,addr_dl, requestIp.des_ip);
+	
+	ms_sleep(100); //target need be slow a little
 	send_command_to_end_device(cmde_des, strlen(cmde_des));
 	result = recv_command_from_end_device(dev_pack_buf, &length);
 	if (result == recv_result_COMPLETED)
@@ -854,8 +877,8 @@ int XBee_at_dev_register(char *addr_dh,char *addr_dl)
 		{
 			puts("Checksum error!!\n");
 		}
-			
-	}		
+
+	}
 	else if (result == recv_result_TIMEOUT)
 	{
 		puts("Timeout!!\n");
@@ -888,15 +911,15 @@ void clear_XBee_at_recv_buff(unsigned long clear_time)
 
 conn_status conn_XBee_at_device(char *addr_dh, char *addr_dl)
 {
-	int offset = 0, len = 0, i = 0;	
+	//int offset = 0, len = 0, i = 0;
 
 	const int cmd_len = 15;
-	const int recv_buf_len = 8;
+	//const int recv_buf_len = 8;
 	char cmd_connect[cmd_len] = { "\0" };
-	char buf[recv_buf_len] = { "\0" };
+	//char buf[recv_buf_len] = { "\0" };
 	char *cmd_con_dh = "ATDH";
-	char *cmd_con_dl = "ATDL";		
-	char *res_con_succeed = "OK\r";
+	char *cmd_con_dl = "ATDL";
+	//char *res_con_succeed = "OK\r";
 
 	//recv_result result;
 	conn_status conn_res = conn_status_failed;
@@ -913,12 +936,12 @@ conn_status conn_XBee_at_device(char *addr_dh, char *addr_dl)
 	charcat(cmd_connect, addr_dl, strlen(cmd_con_dl), MACADDRLEN);
 	cmd_connect[strlen(cmd_connect)] = '\r';
 	conn_res_B = send_AT_command(cmd_connect);
-	
+
 	if (conn_res_A == conn_status_succeed && conn_res_B == conn_status_succeed)
 	{
 		conn_res = conn_status_succeed;
 	}
-	
+
 	return conn_res;
 }
 
@@ -946,7 +969,7 @@ int add_new_XBee_at_device(char *addr_dh, char *addr_dl)
 	}
 
 	int i = 0;
-	
+
 	for (i = 0; i < MAXDEVICECOUNT; i++)
 	{
 		if (xbee_at_devices[i] == NULL)
@@ -966,7 +989,7 @@ int add_new_XBee_at_device(char *addr_dh, char *addr_dl)
 		}
 	}
 
-	
+
 	return i;
 }
 
@@ -976,9 +999,9 @@ void remove_XBee_at_device(int deviceIndex)
 
 	char sendBuffer[MAXPACKETSIZE];
 	char cmdBuffer[MAXPACKETSIZE];
-	int cmd_len = 0, n = 0, idx = 0;
+	int cmd_len = 0, n = 0;
 
-	IoT_Package package_info = generate_iot_package();
+	//IoT_Package package_info = generate_iot_package();
 	IoT_Command cmd = generate_iot_command();
 
 	cmd.cmd_type = command_t_Management;
@@ -991,7 +1014,7 @@ void remove_XBee_at_device(int deviceIndex)
 	create_package(&send_package_info, (char*)"0", ServerIP, cmdBuffer, cmd_len);
 	n = encode_package(sendBuffer, &send_package_info);
 
-	idx = package_info.belongSocketIdx;
+	//idx = package_info.belongSocketIdx;
 	send(xbee_at_broker_socket, sendBuffer, n, 0);
 	free_package(&send_package_info);
 
@@ -1006,10 +1029,10 @@ void remove_XBee_at_device(int deviceIndex)
 int find_XBee_at_device_index(char *addr_dh, char *addr_dl)
 {
 	int index = -1, i = 0;
-	
+
 	for (i = 0; i < MAXDEVICECOUNT; i++)
 	{
-		if (xbee_at_devices[i] != NULL && 
+		if (xbee_at_devices[i] != NULL &&
 			memcmp(xbee_at_devices[i]->xbee_at_mac_addr_DH, addr_dh, MACADDRLEN) == 0 &&
 			memcmp(xbee_at_devices[i]->xbee_at_mac_addr_DL, addr_dl, MACADDRLEN) == 0)
 		{
@@ -1017,7 +1040,7 @@ int find_XBee_at_device_index(char *addr_dh, char *addr_dl)
 			break;
 		}
 	}
-	
+
 	return index;
 }
 
@@ -1039,9 +1062,8 @@ int find_XBee_at_device_index_by_IoTIp(IoTIp *ip)
 	return index;
 }
 
-
 void update_XBee_at_iot_ip(char *addr_dh, char *addr_dl, IoTIp ip)
-{	
+{
 	int index = find_XBee_at_device_index(addr_dh, addr_dl);
 	if (index >= 0)
 	{
@@ -1051,15 +1073,13 @@ void update_XBee_at_iot_ip(char *addr_dh, char *addr_dl, IoTIp ip)
 		xbee_at_devices[index]->isAlive = 1;
 		memset(xbee_at_devices[index]->ip.ip, '\0', xbee_at_devices[index]->ip.ipLength + 1);
 		memcpy(xbee_at_devices[index]->ip.ip, ip.ip, xbee_at_devices[index]->ip.ipLength);
-	}	
+	}
 }
-
-
 
 int is_XBee_at_device_exists(char *addr_dh, char *addr_dl)
 {
 	int isExists = 0, i = 0;
-	
+
 	for (i = 0; i < MAXDEVICECOUNT; i++)
 	{
 		if (xbee_at_devices[i] != NULL)
@@ -1073,7 +1093,7 @@ int is_XBee_at_device_exists(char *addr_dh, char *addr_dl)
 			}
 		}
 	}
-	
+
 	return isExists;
 }
 

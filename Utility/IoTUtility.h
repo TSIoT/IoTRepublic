@@ -96,4 +96,5 @@ void printAllChar(char *data, int length);
 void charcat(char *base_buf, char *target, int starIdx, int length);
 void split_char_array(char *source, char *output1, char *output2, int split_index, int length);
 int string_search(char *pattern, int startIndex, char *base_str);
+recv_result check_sum(char *buf, int len, unsigned int sended_sum);
 #endif

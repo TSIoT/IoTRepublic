@@ -36,7 +36,7 @@ int File_write(TSFile *f, void *buffer, unsigned int  len)
 #ifdef _WIN32
 	return (_write(*f, buffer, len) == (unsigned int)len);
 #else
-	return (write(*f, buffer, len) == (int32)len);
+	return (write(*f, buffer, len) == (unsigned int)len);
 #endif
 }
 
@@ -66,7 +66,7 @@ unsigned long File_size(TSFile *f)
 	struct stat fs;
 	fstat(*f, &fs);
 	return (fs.st_size);
-#endif	
+#endif
 }
 
 int File_close(TSFile *f)
@@ -105,7 +105,7 @@ int File_find_first(TSFileFind *filefind, char *path, TSFileInfo *fileinfo)
 	if ((filefind->handle = opendir(path)) != NULL)
 		return File_find_next(filefind, fileinfo);
 
-	return FALSE;
+	return 0;
 #endif
 }
 
@@ -138,10 +138,10 @@ int File_find_next(TSFileFind *filefind, TSFileInfo *fileinfo)
 		fileinfo->size = fs.st_size;
 		fileinfo->time_write = fs.st_mtime;
 
-		return TRUE;
+		return 1;
 	};
 
-	return FALSE;
+	return 0;
 #endif
 }
 

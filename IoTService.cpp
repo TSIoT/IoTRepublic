@@ -14,9 +14,6 @@
 //Just for test
 //#include "XBeeBroker\XBeeApiMode.h"
 //#include "XBeeBroker\rs232.h"
-
-
-
 #define MAXDEVICECOUNT 100
 char *ServerIP = "Master";
 char *prefix = "DEV.";
@@ -72,7 +69,7 @@ void loadConfigFile();
 int main(int argc, char *argv[])
 {
 	//ble_test();
-	
+
 	init_server_info();
 
 	Server_Object serverObj;
@@ -81,18 +78,17 @@ int main(int argc, char *argv[])
 
 	start_broadcast_server();
 	start_xbee_at_broker();
-	//xbee_test();
 	//start_XBee_broker();
-	//start_ble_broker();
-		
+	start_ble_broker();
+
 	PAUSE;
-	
+
 	stop_broadcast_server();
-	//stop_XBee_broker();
-	//stop_ble_broker();
-	stop_xbee_at_broker();
+	stop_XBee_broker();
+	stop_ble_broker();
+	//stop_xbee_at_broker();
 	close_main_server(&serverObj);
-		
+
 	PAUSE;
 	return 0;
 }
@@ -356,21 +352,21 @@ int close_main_server(Server_Object *server_obj)
 
 	CloseIoTSocket(server_obj->listener);
 	//printf("Server closed_2");
-	//Thread_stop(&server_obj->serverThread);	
-	printf("Server closed_2.5");
-	Thread_kill(&server_obj->serverThread);	
-	printf("Server closed_3");
+	//Thread_stop(&server_obj->serverThread);
+	//printf("Server closed_2.5");
+	//Thread_kill(&server_obj->serverThread);
+	//printf("Server closed_3");
 	for (i = 0; i < MAXCLIENTS; i++)
 	{
 		if (packageBuffer[i] != NULL)
 		{
 			//free_package_buffer(packageBuffer[i]);
 		}
-	}	
+	}
 	printf("Server closed_4");
 
 	clear_all_device_info();
-	
+
 
 #if defined(WIN32)
 	WSACleanup();

@@ -31,13 +31,12 @@ void free_command(IoT_Command *cmd)
 
 int encode_iot_cmd(char* cmd_buffer, IoT_Command *cmd)
 {
-	int empty_length = 0;
 	char *keys[2];
 	char *empty_cmd = "{\"IOTCMD\":{\"Type\":None,\"ID\":0,\"Value\":0}}";
 
 	keys[0] = "IOTCMD";
 
-	empty_length = strlen(empty_cmd);
+	//empty_length = strlen(empty_cmd);
 
 	JsonData json_obj;
 	strcpy(json_obj.content, empty_cmd);
@@ -162,7 +161,7 @@ int isVaildPackage(char *buffer, int buffer_length)
 void create_package(IoT_Package *package, char *sor_ip, char *des_ip, char *data, int data_length)
 {
 	int header_length = 0;
-	char str_header_length[10], str_data_length[10];
+	char str_data_length[10];
 
 	package->ver_length = strlen(CurrentVersion);
 	//package->ver = (char*)malloc(sizeof(char)*package->ver_length+1);
@@ -384,7 +383,7 @@ int decode_package(char* buffer, IoT_Package *packageInfo)
 	int i = 0, offset = 0;
 	uint32_t sum = 0;
 	uint16_t receive_sum=0;
-	char str_head_len[5], str_data_len[5];
+	//char str_head_len[5], str_data_len[5];
 	decode_only_header(buffer, packageInfo);
 
 	/*
@@ -689,7 +688,7 @@ void printAllChar(char *data, int length)
 			printf("%c", data[i]);
 			//printf("%X ", data[i]);
 		}
-			
+
 	}
 	printf("\n");
 }
@@ -717,7 +716,7 @@ void split_char_array(char *source, char *output1, char *output2, int split_inde
 
 	for (i = 0; i < length; i++)
 	{
-		char temp = source[idx];
+		//char temp = source[idx];
 		output2[i] = source[idx];
 		idx++;
 	}
@@ -754,4 +753,25 @@ int string_search(char *pattern, int startIndex, char *base_str)
 
 
 	return targetIndex;
+}
+
+recv_result check_sum(char *buf, int len, unsigned int sended_sum)
+{
+	int i = 0;
+	unsigned int sum = 0;
+
+	for (i = 0; i < len; i++)
+	{
+		sum += buf[i];
+	}
+
+	if (sended_sum == sum)
+	{
+		return recv_result_NOERROR;
+	}
+	else
+	{
+		return recv_result_CHECKSUM_ERROR;
+	}
+
 }

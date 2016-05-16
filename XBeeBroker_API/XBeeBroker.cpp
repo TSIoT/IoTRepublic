@@ -484,9 +484,9 @@ void remove_xbee_device(int deviceIndex)
 
 	char sendBuffer[MAXPACKETSIZE];
 	char cmdBuffer[MAXPACKETSIZE];
-	int cmd_len = 0,n=0,idx=0;
+	int cmd_len = 0,n=0;
 
-	IoT_Package package_info = generate_iot_package();
+	//IoT_Package package_info = generate_iot_package();
 	IoT_Command cmd = generate_iot_command();
 
 	cmd.cmd_type = command_t_Management;
@@ -499,7 +499,7 @@ void remove_xbee_device(int deviceIndex)
 	create_package(&send_package_info, (char*)"0", ServerIP, cmdBuffer, cmd_len);
 	n = encode_package(sendBuffer, &send_package_info);
 
-	idx = package_info.belongSocketIdx;
+	//idx = package_info.belongSocketIdx;
 	send(iot_socket, sendBuffer, n, 0);
 	free_package(&send_package_info);
 
@@ -641,8 +641,8 @@ void stop_XBee_broker()
 	Thread_stop(&xbee_client_thread);
 	Thread_kill(&xbee_client_thread);
 
-	Mutex_free(&lock);	
-	
+	Mutex_free(&lock);
+
 	uninit_XBee_broker();
 }
 
