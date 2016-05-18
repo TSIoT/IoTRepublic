@@ -4,6 +4,7 @@
 #include <string.h>
 #include "Utility/IoTSocket.h"
 #include "Utility/thread.h"
+#include "Utility\IoTUtility.h"
 
 TSThread broadcast_server_thread;
 IoTSocket listeningSocket;
@@ -88,8 +89,8 @@ int server_loop(void)
 		{
 			buf[result] = '\0';
 			printf("%s\n", buf);
-
-
+			//ms_sleep(100);
+			
 			if (sendto(listeningSocket, sendData, strlen(sendData), 0, (struct sockaddr *)&receiveSockaddr, sizeof(receiveSockaddr))<0)
 			{
 				puts("Broadcast server Send error");

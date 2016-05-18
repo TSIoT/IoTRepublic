@@ -47,6 +47,9 @@
     <ClCompile Include="..\XBeeBroker_AT\XBeeBroker_AT.cpp">
       <Filter>XBeeBroker_AT</Filter>
     </ClCompile>
+    <ClCompile Include="..\XBeeBroker_API\XBeeBroker_API.cpp">
+      <Filter>XBeeBroker_API</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\BroadcastServer.h" />
@@ -83,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="..\XBeeBroker_AT\XBeeBroker_AT.h">
       <Filter>XBeeBroker_AT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\XBeeBroker_API\XBeeBroker_API.h">
+      <Filter>XBeeBroker_API</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

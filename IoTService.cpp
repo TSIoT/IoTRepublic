@@ -3,7 +3,7 @@
 #include<string.h>
 
 #include "IoTService.h"
-#include "XBeeBroker_API/XBeeBroker.h"
+#include "XBeeBroker_API/XBeeBroker_API.h"
 #include "XBeeBroker_AT/XBeeBroker_AT.h"
 #include "Utility/jsFileParser.h"
 #include "Utility/file.h"
@@ -75,18 +75,24 @@ int main(int argc, char *argv[])
 	Server_Object serverObj;
 	init_main_server(&serverObj);
 	start_main_server(&serverObj);
-
+	
 	start_broadcast_server();
+	start_xbee_api_broker();
+	/*
 	start_xbee_at_broker();
-	//start_XBee_broker();
 	start_ble_broker();
-
+	*/
+	
 	PAUSE;
-
-	stop_broadcast_server();
-	stop_XBee_broker();
+	
+	/*
+	stop_xbee_at_broker();
 	stop_ble_broker();
-	//stop_xbee_at_broker();
+	*/
+	
+	stop_xbee_api_broker();
+	stop_broadcast_server();
+
 	close_main_server(&serverObj);
 
 	PAUSE;
@@ -192,6 +198,7 @@ int main_server_loop(Server_Object *server_obj)
 	FD_ZERO(&readfds);
 
 	//add listener socket to fd set
+
 	FD_SET(server_obj->listener, &master);
 
 	while (1)
