@@ -145,12 +145,12 @@ int ble_listen_to_manager_loop(void)
 				{
 					//printf("Recv a completed package from manager\n");
 					//ble_mac_addr = find_ble_addr_by_iotip(&package.des_ip);
+					
 					target_index = find_BLE_device_index_by_IoTIp(&recv_package.des_ip);
 					if (target_index >= 0)
 					{
-						//puts("Found device\n");
+						//puts("Found device\n");						
 						status = conn_ble_device(ble_devices[target_index]->ble_mac_addr);
-
 						if (status == conn_status_succeed)
 						{
 							//parse the IoT command, only send id to end device
@@ -300,7 +300,6 @@ void unInit_BLE_broker()
 	CloseIoTSocket(ble_broker_socket);
 }
 
-
 //BLE device control
 conn_status send_command_to_ble_device(char *cmd, int len)
 {
@@ -320,7 +319,6 @@ conn_status send_command_to_ble_device(char *cmd, int len)
 	return res;
 }
 
-
 //BLE network maintain
 int send_package_to_Manager(IoTSocket socket, IoT_Package *package)
 {
@@ -334,50 +332,6 @@ int send_package_to_Manager(IoTSocket socket, IoT_Package *package)
 	Mutex_unlock(&ble_lock);
 	return 0;
 }
-
-/*
-recv_result recv_package_from_BLEBee(IoT_Package *package)
-{
-	unsigned long start_taime = 0, wait_time = 0;
-	int offset = 0, n = 0;
-
-	char recv_buf[MAXRECVBUFFER] = { '\0' };
-	char buf[MAXPACKETSIZE] = { '\0' };
-
-	recv_result result;
-
-	start_taime = get_millis();
-	while (1)
-	{
-		wait_time = get_millis() - start_taime;
-
-		if (wait_time > ACK_TIMEOUT)
-		{
-			printf("Timeout!! register package from BLE device\n");
-			return recv_result_TIMEOUT;
-			//break;
-		}
-
-		n = RS232_PollComport(COMPORTNUMBER, (unsigned char*)recv_buf, MAXPACKETSIZE);
-		if (n > 0)
-		{
-			printAllChar(recv_buf, n);
-			charcat(buf, recv_buf, offset, n);
-			offset += n;
-			result = getCompletedPackage(buf, &offset, package);
-			if (result == recv_result_COMPLETED)
-			{
-				//send_package_to_Manager(ble_broker_socket, package);
-				//puts("Got register package from BLE device\n");
-				return recv_result_COMPLETED;
-				//break;
-			}
-			start_taime = get_millis();
-		}
-	}
-	//return recv_result_NOERROR;
-}
-*/
 
 recv_result recv_command_from_ble_device(char *buf, int *len)
 {
@@ -437,40 +391,11 @@ recv_result recv_command_from_ble_device(char *buf, int *len)
 			break;
 		}
 	}
-	clear_recv_buff(300);
+	//clear_recv_buff(300);
 	//clear_XBee_at_recv_buff(300);
 	return res;
 }
-/*
-recv_result recv_package_from_Manager(IoTSocket socket, IoT_Package *package)
-{
-	int n = 0, offset = 0;
-	char recvBuffer[MAXRECV] = { '\0' };
-	char tempBuffer[MAXRECV] = { '\0' };
-	recv_result result;
 
-	while (1)
-	{
-		n = recv(socket, recvBuffer, MAXRECV, 0);
-		if (n > 0)
-		{
-			charcat(tempBuffer, recvBuffer, offset, n);
-			offset += n;
-			//printAllChar(tempBuffer, offset);
-			result = getCompletedPackage(tempBuffer, &offset, package);
-			if (result == recv_result_COMPLETED)
-			{
-				break;
-			}
-			else
-			{
-				return result;
-			}
-		}
-	}
-	return recv_result_COMPLETED;
-}
-*/
 recv_result recv_char(char *base_buf, int max_len, unsigned long timeout)//Use for AT Command
 {
 	const int temp_buf_len = 500;
@@ -571,7 +496,7 @@ void scan_ble_devices()
 				//printf("%c", buffer[search_res]);
 				search_res++;
 			}
-			clear_recv_buff(100);
+			
 			connection_status = conn_ble_device(ble_mac_addr);
 			if (connection_status == conn_status_succeed)
 			{
@@ -587,6 +512,7 @@ void scan_ble_devices()
 					if (memcmp(ack_msg, receiveBuf, strlen(ack_msg)) == 0)
 					{
 						printf("Got BLE device Ack\n");
+						disconn_ble_device();
 						ble_dev_register(ble_mac_addr);
 					}
 					else
@@ -603,6 +529,10 @@ void scan_ble_devices()
 				disconn_ble_device();
 				//add_new_ble_device(ble_mac_addr);
 				printf("\n");
+			}
+			else
+			{
+				printf("Connect to %s failed", ble_mac_addr);
 			}
 
 			i = search_res;
@@ -683,39 +613,43 @@ int ble_dev_register(char *addr)
 	//Ask a IoTIP then give to BLE device
 	ask_a_IoTIP(&requestIp);
 	update_iot_ip(addr, requestIp.des_ip);
-	send_command_to_ble_device(cmde_des,strlen(cmde_des));
-
-	result = recv_command_from_ble_device(dev_pack_buf, &length);
-	if (result == recv_result_COMPLETED)
+	
+	do
 	{
-		sum = 0;
-		sum |= (unsigned char)dev_pack_buf[length - 2];
-		sum = sum << 8;
-		sum |= (unsigned char)dev_pack_buf[length - 1];
-		puts("Received device description\n");
-
-		result = check_sum(dev_pack_buf, length - 2, sum);
-		if (result == recv_result_NOERROR)
+		conn_ble_device(addr);
+		send_command_to_ble_device(cmde_des, strlen(cmde_des));
+		result = recv_command_from_ble_device(dev_pack_buf, &length);
+		if (result == recv_result_COMPLETED)
 		{
-			puts("Checksum No-error\n");
-		}
-		else if (result == recv_result_CHECKSUM_ERROR)
-		{
-			puts("Checksum error!!\n");
-		}
-	}
-	else if (result == recv_result_TIMEOUT)
-	{
-		puts("Timeout!!\n");
-	}
+			sum = 0;
+			sum |= (unsigned char)dev_pack_buf[length - 2];
+			sum = sum << 8;
+			sum |= (unsigned char)dev_pack_buf[length - 1];
+			puts("Received device description\n");
 
-	if (result == recv_result_NOERROR)
-	{
-		//-2 means no need the check sum for device description
-		dev_pack_buf[length - 2] = '\0'; //json file need a '\0' to be a end of file
-		create_package(&package, requestIp.des_ip.ip, requestIp.sor_ip.ip, dev_pack_buf, length - 1);
-		send_package_to_Manager(ble_broker_socket, &package);
-	}
+			result = check_sum(dev_pack_buf, length - 2, sum);
+			if (result == recv_result_NOERROR)
+			{
+				puts("Checksum No-error\n");
+			}
+			else if (result == recv_result_CHECKSUM_ERROR)
+			{
+				puts("Checksum error!!\n");
+			}
+		}
+		else if (result == recv_result_TIMEOUT)
+		{
+			puts("Timeout!!\n");
+		}
+		disconn_ble_device();
+	} while (result!= recv_result_NOERROR);
+	
+
+	//-2 means no need the check sum for device description
+	dev_pack_buf[length - 2] = '\0'; //json file need a '\0' to be a end of file
+	create_package(&package, requestIp.des_ip.ip, requestIp.sor_ip.ip, dev_pack_buf, length - 1);
+	send_package_to_Manager(ble_broker_socket, &package);
+
 	//create_package(&package, requestIp.sor_ip.ip, requestIp.des_ip.ip, "0", 1);
 	//puts("Send IoTIP to BLE device\n");
 	//send_package_to_BLEBee(package);
@@ -749,9 +683,7 @@ void clear_recv_buff(unsigned long clear_time)
 
 conn_status conn_ble_device(char *addr)
 {
-
 	unsigned long timeout = 1000;
-
 
 	const int cmd_len = 18;
 	const int recv_buf_len = 8;
@@ -767,8 +699,10 @@ conn_status conn_ble_device(char *addr)
 	charcat(cmd_connect, cmd_con, 0, strlen(cmd_con));
 	charcat(cmd_connect, addr, strlen(cmd_con), MACADDRLEN);
 
+
+	clear_recv_buff(50);
 	//cmd_connect[MACADDRLEN - 1] = '0';
-	ms_sleep(500);// AT Command safe time
+	ms_sleep(50);// AT Command safe time
 	RS232_SendBuf(COMPORTNUMBER, (unsigned char*)cmd_connect, cmd_len);
 
 	//receive connect result
@@ -830,7 +764,8 @@ void disconn_ble_device()
 
 	do
 	{
-		ms_sleep(100);// AT Command safe time
+		clear_recv_buff(50);
+		ms_sleep(50);// AT Command safe time
 		RS232_SendBuf(COMPORTNUMBER, (unsigned char*)discon_cmd, strlen(discon_cmd));
 		recv_char(buf, strlen(res_discon), timeout);
 		if (memcmp(buf, res_discon, strlen(res_discon)) == 0 ||
@@ -993,7 +928,6 @@ IoTIp* find_iotip_by_ble_addr(char *addr)
 
 	return ip;
 }
-
 
 
 char* find_ble_addr_by_iotip(IoTIp *iotip)

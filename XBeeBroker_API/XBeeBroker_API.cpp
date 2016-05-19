@@ -79,7 +79,6 @@ void xbee_api_test()
 	unInit_XBee_api_broker();	
 }
 
-
 //********thread***********
 
 //listen tcp server send to ble device
@@ -144,7 +143,7 @@ int xbee_api_listen_to_manager_loop(void)
 						strcpy(cmd_id, recv_cmd.ID);
 
 						send_command_to_api_end_device(xbee_api_devices[target_index]->xbee_at_mac_addr, cmd_id, strlen(recv_cmd.ID));
-						recv_response_api_mode(NULL, &len, ZB_TX_STATUS_RESPONSE);
+						recv_response_api_mode(NULL, NULL, ZB_TX_STATUS_RESPONSE);
 						
 						if (recv_cmd.cmd_type == command_t_ReadRequest)
 						{
@@ -305,7 +304,8 @@ conn_status recv_response_api_mode(char *value,int *len, int expect_response)
 	ZBRxResponse rx_response = ZBRxResponse();
 	TxStatusResponse txStatus = TxStatusResponse();
 	
-	*len = 0;
+	if(expect_response!= ZB_TX_STATUS_RESPONSE)
+		*len = 0;
 	
 	if (xbee_obj.readPacket(ACK_TIMEOUT))
 	{

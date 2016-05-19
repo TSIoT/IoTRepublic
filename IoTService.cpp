@@ -78,24 +78,20 @@ int main(int argc, char *argv[])
 	
 	start_broadcast_server();
 	start_xbee_api_broker();
-	/*
-	start_xbee_at_broker();
 	start_ble_broker();
-	*/
-	
-	PAUSE;
-	
 	/*
-	stop_xbee_at_broker();
-	stop_ble_broker();
+	start_xbee_at_broker();	
+	*/	
+	PAUSE;	
+	/*
+	stop_xbee_at_broker();	
 	*/
-	
+	stop_ble_broker();
 	stop_xbee_api_broker();
 	stop_broadcast_server();
 
 	close_main_server(&serverObj);
 
-	PAUSE;
 	return 0;
 }
 
