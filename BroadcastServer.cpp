@@ -4,7 +4,7 @@
 #include <string.h>
 #include "Utility/IoTSocket.h"
 #include "Utility/thread.h"
-#include "Utility\IoTUtility.h"
+#include "Utility/IoTUtility.h"
 
 TSThread broadcast_server_thread;
 IoTSocket listeningSocket;
@@ -52,10 +52,8 @@ int server_loop(void)
 	//sockaddr.sin_addr.s_addr = inet_addr("192.168.0.255");
 	sockaddr.sin_port = htons(BroadcastPort);
 
-
-
 	int bBroadcast = 1;
-	if (setsockopt(listeningSocket, SOL_SOCKET, SO_BROADCAST, (const char*)&bBroadcast, sizeof(int)) != 0)
+	if (setsockopt(listeningSocket, SOL_SOCKET, SO_BROADCAST, (const char*)&bBroadcast, sizeof(int)) == -1)
 	{
 		puts("Enable broadcast failed");
 	}
@@ -78,18 +76,23 @@ int server_loop(void)
         socklen_t receiveSockaddrLen = sizeof(receiveSockaddr);
     #endif
 
-
     puts("Broad cast server started\n");
 
 	while (1)
 	{
 		int result = recvfrom(listeningSocket, buf, buf_size, 0, (struct sockaddr *)&receiveSockaddr, &receiveSockaddrLen);
-
+		/*
+		in_addr addr = receiveSockaddr.sin_addr;
+		unsigned int lastIp = addr.S_un.S_un_b.s_b4;
+		
+		if (lastIp != 217)
+			result = 0;
+		*/
 		if (result > 0)
 		{
 			buf[result] = '\0';
 			printf("%s\n", buf);
-			//ms_sleep(100);
+			//ms_sleep(1000);
 			
 			if (sendto(listeningSocket, sendData, strlen(sendData), 0, (struct sockaddr *)&receiveSockaddr, sizeof(receiveSockaddr))<0)
 			{
@@ -99,7 +102,6 @@ int server_loop(void)
 			{
 				puts("Broadcast server Response sended");
 			}
-
 		}
 		else
 		{

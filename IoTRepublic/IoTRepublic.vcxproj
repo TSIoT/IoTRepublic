@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="..\BLEBeeBroker\BLEBeeBroker.cpp" />
     <ClCompile Include="..\BroadcastServer.cpp" />
+    <ClCompile Include="..\FakeBroker\FakeBroker.cpp" />
     <ClCompile Include="..\IoTService.cpp" />
     <ClCompile Include="..\Utility\file.cpp" />
     <ClCompile Include="..\Utility\IoTUtility.cpp" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="..\BLEBeeBroker\BLEBeeBroker.h" />
     <ClInclude Include="..\BroadcastServer.h" />
+    <ClInclude Include="..\FakeBroker\FakeBroker.h" />
     <ClInclude Include="..\IoTService.h" />
     <ClInclude Include="..\Utility\file.h" />
     <ClInclude Include="..\Utility\IoTSocket.h" />

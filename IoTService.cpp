@@ -9,7 +9,7 @@
 #include "Utility/file.h"
 #include "BroadcastServer.h"
 #include "BLEBeeBroker/BLEBeeBroker.h"
-
+#include "FakeBroker/FakeBroker.h"
 
 //Just for test
 //#include "XBeeBroker\XBeeApiMode.h"
@@ -70,6 +70,7 @@ int main(int argc, char *argv[])
 {
 	//ble_test();
 
+	
 	init_server_info();
 
 	Server_Object serverObj;
@@ -77,8 +78,11 @@ int main(int argc, char *argv[])
 	start_main_server(&serverObj);
 	
 	start_broadcast_server();
-	start_xbee_api_broker();
-	start_ble_broker();
+
+
+	start_fake_broker();
+	//start_xbee_api_broker();
+	//start_ble_broker();
 	/*
 	start_xbee_at_broker();	
 	*/	
@@ -86,8 +90,9 @@ int main(int argc, char *argv[])
 	/*
 	stop_xbee_at_broker();	
 	*/
-	stop_ble_broker();
-	stop_xbee_api_broker();
+	//stop_ble_broker();
+	//stop_xbee_api_broker();
+	stop_fake_broker();
 	stop_broadcast_server();
 
 	close_main_server(&serverObj);

@@ -12,14 +12,14 @@
 
 
 #if defined(WIN32)
-#define COM_XBee_API 20
+#define COM_XBee_API 28
 
 #elif defined(__linux__) || defined(__FreeBSD__)
 #define COM_XBee_API 16
 
 #endif
 
-#define ACK_TIMEOUT 1000
+#define ACK_TIMEOUT 2000
 #define XBee_at_INTERVAL 100
 //#define RESEND_Time 700
 XBee xbee_obj = XBee();
@@ -197,8 +197,8 @@ int xbee_api_listen_to_manager_loop(void)
 	return 0;
 }
 
-//public main function
 
+//public main function
 void start_xbee_api_broker()
 {
 	init_XBee_api_broker();
@@ -219,6 +219,7 @@ void stop_xbee_api_broker()
 
 	unInit_XBee_api_broker();
 }
+
 
 //private main function
 int init_XBee_api_broker()
@@ -269,6 +270,7 @@ void unInit_XBee_api_broker()
 	//uninit tcp ip
 	CloseIoTSocket(xbee_api_broker_socket);
 }
+
 
 //XBee device control
 conn_status send_AT_command_api_mode(char *cmd,char *value,int value_len)
@@ -323,8 +325,7 @@ conn_status recv_response_api_mode(char *value,int *len, int expect_response)
 				{
 					*len = response.getValueLength();
 					for (int i = 0; i < response.getValueLength(); i++) 
-					{
-						
+					{						
 						value[i] = response.getValue()[i];
 						//printf("%X ", value[i]);
 					}
@@ -480,8 +481,8 @@ recv_result recv_command_from_api_end_device(char *buf, int *len)
 	return res;
 }
 
-//XBee network maintain
 
+//XBee network maintain
 int send_package_to_Manager_XBee_api(IoTSocket socket, IoT_Package *package)
 {
 	char send_buf[1000] = { '\0' };
@@ -553,7 +554,6 @@ void scan_XBee_api_devices()
 	//char xbee_mac_addr_dl [MACADDRLEN] = { '\0' };
 
 	char *cmd_discover = "ND";
-
 	char *syn_msg = "SYN";
 	char *ack_msg = "ACK";
 
@@ -722,6 +722,7 @@ int XBee_api_dev_register(XBeeAddress64 addr)
 	
 	ms_sleep(100); //target need be slow a little
 	send_command_to_api_end_device(addr,cmde_des, strlen(cmde_des));
+	recv_response_api_mode(NULL, NULL, ZB_TX_STATUS_RESPONSE);
 	result = recv_command_from_api_end_device(dev_pack_buf, &length);
 	if (result == recv_result_COMPLETED)
 	{
@@ -740,7 +741,6 @@ int XBee_api_dev_register(XBeeAddress64 addr)
 		{
 			puts("Checksum error!!\n");
 		}
-
 	}
 	else if (result == recv_result_TIMEOUT)
 	{
@@ -771,6 +771,7 @@ void clear_XBee_api_recv_buff(unsigned long clear_time)
 
 	printf("XBee recv buffer cleared\n");
 }
+
 
 //XBee device maintain
 int add_new_XBee_api_device(XBeeAddress64 addr)

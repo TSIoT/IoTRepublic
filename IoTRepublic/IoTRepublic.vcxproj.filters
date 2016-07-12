@@ -13,6 +13,9 @@
     <Filter Include="XBeeBroker_API">
       <UniqueIdentifier>{2f372576-887e-48b7-9c04-aa0d1d740ea2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FakeBroker">
+      <UniqueIdentifier>{faaf22ad-7138-46b5-8255-dc28eec6f907}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BroadcastServer.cpp" />
@@ -35,9 +38,6 @@
     <ClCompile Include="..\Utility\rs232.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\BLEBeeBroker\BLEBeeBroker.cpp">
-      <Filter>BLEBeeBroker</Filter>
-    </ClCompile>
     <ClCompile Include="..\XBeeBroker_API\XBeeApiMode.cpp">
       <Filter>XBeeBroker_API</Filter>
     </ClCompile>
@@ -49,6 +49,12 @@
     </ClCompile>
     <ClCompile Include="..\XBeeBroker_API\XBeeBroker_API.cpp">
       <Filter>XBeeBroker_API</Filter>
+    </ClCompile>
+    <ClCompile Include="..\BLEBeeBroker\BLEBeeBroker.cpp">
+      <Filter>BLEBeeBroker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FakeBroker\FakeBroker.cpp">
+      <Filter>FakeBroker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +81,6 @@
     <ClInclude Include="..\Utility\rs232.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\BLEBeeBroker\BLEBeeBroker.h">
-      <Filter>BLEBeeBroker</Filter>
-    </ClInclude>
     <ClInclude Include="..\XBeeBroker_API\XBeeApiMode.h">
       <Filter>XBeeBroker_API</Filter>
     </ClInclude>
@@ -89,6 +92,12 @@
     </ClInclude>
     <ClInclude Include="..\XBeeBroker_API\XBeeBroker_API.h">
       <Filter>XBeeBroker_API</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BLEBeeBroker\BLEBeeBroker.h">
+      <Filter>BLEBeeBroker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FakeBroker\FakeBroker.h">
+      <Filter>FakeBroker</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
