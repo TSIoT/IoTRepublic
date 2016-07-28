@@ -184,14 +184,6 @@ int xbee_api_listen_to_manager_loop(void)
 
 			} while (result == recv_result_COMPLETED);
 		}
-
-
-		/*
-		if (result == recv_result_COMPLETED)
-		{
-			
-		}
-		*/
 	}
 
 	return 0;

@@ -69,7 +69,6 @@ void loadConfigFile();
 int main(int argc, char *argv[])
 {
 	//ble_test();
-
 	
 	init_server_info();
 
@@ -161,13 +160,13 @@ int main_server_loop(Server_Object *server_obj)
 {
 	IoTSocket new_socket;
 	struct sockaddr_in  address;
-	int activity, i,  valread;
+	int activity, i,  valread,fdmax=65535;
 	//first received buffer
 	char buffer[MAXRECV];
 
 	TimeSpan timeout;
-	timeout.tv_sec = 0;
-	timeout.tv_usec = 1000;
+	timeout.tv_sec = 100;
+	timeout.tv_usec = 0;
 	//set of socket descriptors
 	fd_set master, readfds;
 
@@ -202,10 +201,12 @@ int main_server_loop(Server_Object *server_obj)
 
 	FD_SET(server_obj->listener, &master);
 
+	//fdmax = server_obj->listener + 1;
+
 	while (1)
 	{
 		readfds = master;
-		activity = select(100, &readfds, NULL, NULL, &timeout);
+		activity = select(MAXCLIENTS, &readfds, NULL, NULL, &timeout);
 
 		if (activity == -1)
 		{
@@ -307,6 +308,10 @@ int main_server_loop(Server_Object *server_obj)
 				//Echo back the message that came in
 				else if (valread>0)
 				{
+					/*
+					printf("Received data[%d]", valread);
+					printAllChar(buffer, valread);
+					*/
 					if (packageBuffer[i]->receiveCount+ valread > MAXRECV)
 					{
 						puts("Buffer over flow clear All buffer");
@@ -341,7 +346,7 @@ int main_server_loop(Server_Object *server_obj)
 
 					if (packageBuffer[i]->receiveCount == 0)
 					{
-						printf("Buffer[%d] cleared\n",i);
+						printf("Buffer[%d] cleared2\n",i);
 					}
 
 

@@ -16,6 +16,9 @@
     <Filter Include="FakeBroker">
       <UniqueIdentifier>{faaf22ad-7138-46b5-8255-dc28eec6f907}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CloudBroker">
+      <UniqueIdentifier>{6a6f29f7-4ae6-438a-b64d-f8df4fe72997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BroadcastServer.cpp" />
