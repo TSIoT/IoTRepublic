@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	
 	start_broadcast_server();
 	start_xbee_api_broker();
-	start_ble_broker();
+	//start_ble_broker();
 	/*
 	start_xbee_at_broker();	
 	*/	
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 	/*
 	stop_xbee_at_broker();	
 	*/
-	stop_ble_broker();
+	//stop_ble_broker();
 	stop_xbee_api_broker();
 	stop_broadcast_server();
 
@@ -201,6 +201,7 @@ int main_server_loop(Server_Object *server_obj)
 	{
 		readfds = master;
 		activity = select(100, &readfds, NULL, NULL, &timeout);
+
 
 		if (activity == -1)
 		{
@@ -438,7 +439,11 @@ void handle_managent_package(IoT_Package *package_info)
 	int deviceIndex = -1;
 	char str_temp[temp_str_len] = { '\0' };
 	JsonData jsonData;
+
+	//package_info->data[package_info->data_length] = '\0';
 	charcat(jsonData.content, package_info->data, 0, package_info->data_length);
+	//jsonData.content[package_info->data_length] = '\0';
+	printAllChar(package_info->data, package_info->data_length);
 	init_token(&jsonData);
 	range_t range;
 	range.start = jsonData.tokens[1].start;

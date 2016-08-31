@@ -4,7 +4,7 @@
 #include <string.h>
 #include "Utility/IoTSocket.h"
 #include "Utility/thread.h"
-#include "Utility\IoTUtility.h"
+#include "Utility/IoTUtility.h"
 
 TSThread broadcast_server_thread;
 IoTSocket listeningSocket;

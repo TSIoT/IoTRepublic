@@ -29,10 +29,11 @@ void free_command(IoT_Command *cmd)
 		free(cmd->Value);
 }
 
+
 int encode_iot_cmd(char* cmd_buffer, IoT_Command *cmd)
 {
 	char *keys[2];
-	char *empty_cmd = "{\"IOTCMD\":{\"Type\":None,\"ID\":0,\"Value\":0}}";
+	char *empty_cmd = "{\"IOTCMD\":{\"Type\":\"None\",\"ID\":\"0\",\"Value\":\"0\"}}";
 
 	keys[0] = "IOTCMD";
 
@@ -96,6 +97,8 @@ void decode_iot_cmd(char* cmd_buffer, IoT_Command *cmd)
 	JsonData json_obj;
 
 	strcpy(json_obj.content, cmd_buffer);
+
+
 	init_token(&json_obj);
 	char *keys[2];
 	keys[0] = "IOTCMD";
@@ -457,7 +460,8 @@ int decode_package(char* buffer, IoT_Package *packageInfo)
 
 	//data
 	offset = packageInfo->header_length;
-	packageInfo->data = (char*)malloc(sizeof(char)*packageInfo->data_length);
+	packageInfo->data = (char*)malloc(sizeof(char)*(packageInfo->data_length+1));
+	memset(packageInfo->data, 0, packageInfo->data_length + 1);
 	for (i = 0; i < packageInfo->data_length; i++)
 	{
 		packageInfo->data[i] = buffer[offset];

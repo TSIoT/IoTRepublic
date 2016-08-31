@@ -11,7 +11,7 @@
 
 
 #if defined(WIN32)
-#define COMPORTNUMBER 20
+#define COMPORTNUMBER 4
 
 #elif defined(__linux__) || defined(__FreeBSD__)
 #define COMPORTNUMBER 16
