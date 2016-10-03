@@ -518,7 +518,7 @@ void handle_forwarding_package(IoT_Package *package_info)
 	char sendBuffer[MAXPACKETSIZE];
 	char cmdBuffer[MAXPACKETSIZE];
 	printf("forwarding to:%s\n", package_info->des_ip.ip);
-	//printAllChar(package_info->data, package_info->data_length);
+	printAllChar(package_info->data, package_info->data_length);
 	IoT_Device_Info *device_info = NULL;
 
 	device_info = find_device_with_ip(package_info->des_ip);

@@ -12,7 +12,7 @@
 
 
 #if defined(WIN32)
-#define COM_XBee_API 5
+#define COM_XBee_API 3
 
 #elif defined(__linux__) || defined(__FreeBSD__)
 #define COM_XBee_API 16
